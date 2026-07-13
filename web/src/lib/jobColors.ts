@@ -1,4 +1,31 @@
+import type { TranslationKey } from '@/lib/i18n'
+import { mediaFilenameFromSource } from '@/lib/mediaSourcePath'
 import { COLOR_TOKENS, type ColorTokenName } from '@/lib/themeColor'
+
+export type PaletteLabelTranslator = (key: TranslationKey) => string
+
+function capitalizeToken(value: string): string {
+  return value ? `${value.charAt(0).toUpperCase()}${value.slice(1)}` : value
+}
+
+function replacePlaceholders(template: string, values: Record<string, string>): string {
+  return Object.entries(values).reduce(
+    (msg, [key, value]) => msg.replaceAll(`{${key}}`, value),
+    template,
+  )
+}
+
+const EXTRACTED_FILENAME_MAX_LEN = 24
+
+export function extractedPaletteBasename(filename: string): string {
+  return mediaFilenameFromSource(filename) || filename
+}
+
+export function displayExtractedFilename(filename: string): string {
+  const base = extractedPaletteBasename(filename)
+  if (base.length <= EXTRACTED_FILENAME_MAX_LEN) return base
+  return `${base.slice(0, EXTRACTED_FILENAME_MAX_LEN - 1)}…`
+}
 
 /** Job-level resolved palette (matches pixfabrica_core.theme.color.ColorPalette). */
 export type JobColorPalette = Record<ColorTokenName, string>
@@ -75,24 +102,35 @@ export function parsePaletteSource(raw: unknown): PaletteSource | null {
   }
   if (type === 'extracted') {
     const filename = obj.filename
+    const raw = typeof filename === 'string' ? filename : undefined
     return {
       type: 'extracted',
-      filename: typeof filename === 'string' ? filename : undefined,
+      filename: raw ? extractedPaletteBasename(raw) : undefined,
     }
   }
   if (type === 'custom') return { type: 'custom' }
   return null
 }
 
-export function paletteSourceLabel(source: PaletteSource | null): string {
-  if (!source) return 'Custom'
+export function paletteSourceLabel(
+  source: PaletteSource | null,
+  t: PaletteLabelTranslator,
+): string {
+  if (!source) return t('left_theme_custom')
   if (source.type === 'named') {
-    return `${source.theme.charAt(0).toUpperCase()}${source.theme.slice(1)} (${source.variant.charAt(0).toUpperCase()}${source.variant.slice(1)})`
+    const variantKey = source.variant === 'dark' ? 'theme_variant_dark' : 'theme_variant_light'
+    return replacePlaceholders(t('left_theme_named_preset'), {
+      theme: capitalizeToken(source.theme),
+      variant: t(variantKey),
+    })
   }
   if (source.type === 'extracted') {
-    return source.filename ? `Extracted · ${source.filename}` : 'Extracted from image'
+    if (!source.filename) return t('left_theme_extracted_from_image')
+    return replacePlaceholders(t('left_theme_extracted_named'), {
+      filename: displayExtractedFilename(source.filename),
+    })
   }
-  return 'Custom'
+  return t('left_theme_custom')
 }
 
 export function jobThemeRecord(palette: JobColorPalette): Record<string, string> {

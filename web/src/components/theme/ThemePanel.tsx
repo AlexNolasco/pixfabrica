@@ -11,6 +11,7 @@ import { PaletteSwatchStrip } from '@/components/theme/PaletteSwatchStrip'
 import { apiUploadMedia } from '@/lib/mediaUpload'
 import {
   cloneJobColors,
+  extractedPaletteBasename,
   paletteSourceLabel,
   presetOptionValue,
   type JobColorPalette,
@@ -60,13 +61,18 @@ export function ThemePanel() {
         (p) =>
           p.theme === paletteSource.theme && p.variant === paletteSource.variant,
       )
-      return preset?.label ?? paletteSourceLabel(paletteSource)
+      return preset?.label ?? paletteSourceLabel(paletteSource, t)
     }
     if (paletteSource?.type === 'extracted') {
-      return paletteSourceLabel(paletteSource)
+      return paletteSourceLabel(paletteSource, t)
     }
     return t('left_theme_custom')
   }, [paletteSource, t, themePresets])
+
+  const triggerTitle =
+    paletteSource?.type === 'extracted' && paletteSource.filename
+      ? extractedPaletteBasename(paletteSource.filename)
+      : undefined
 
   const onPickPreset = useCallback(
     (theme: ThemeName, variant: ThemeVariant, presetColors: JobColorPalette) => {
@@ -174,9 +180,11 @@ export function ThemePanel() {
             <span className="text-muted-foreground">{t('left_theme_preset')}</span>
             <div className="flex items-center gap-1">
               <DropdownMenu>
-                <DropdownMenuTrigger className={`${triggerClass} min-w-0 flex-1`}>
+                <DropdownMenuTrigger className={`${triggerClass} min-w-0 flex-1 overflow-hidden`}>
                   <PaletteSwatchStrip palette={colors} size="xs" />
-                  <span className="min-w-0 flex-1 truncate text-left">{triggerLabel}</span>
+                  <span className="min-w-0 flex-1 truncate text-left" title={triggerTitle}>
+                    {triggerLabel}
+                  </span>
                   <ChevronDown className="h-3.5 w-3.5 shrink-0 text-muted-foreground" />
                 </DropdownMenuTrigger>
                 <DropdownMenuContent className="max-h-64 min-w-[var(--radix-dropdown-menu-trigger-width)]" align="start">

@@ -18,6 +18,7 @@ import {
   DEFAULT_JOB_COLORS,
   DEFAULT_PALETTE_SOURCE,
   cloneJobColors,
+  extractedPaletteBasename,
   type JobColorPalette,
   type PaletteSource,
   type ThemeName,
@@ -894,7 +895,10 @@ export const useProjectStore = create<ProjectState>()(
       applyExtractedPalette: (colors, filename) =>
         set({
           colors: cloneJobColors(colors),
-          paletteSource: { type: 'extracted', filename },
+          paletteSource: {
+            type: 'extracted',
+            filename: extractedPaletteBasename(filename),
+          },
         }),
 
       applyCustomPalette: (colors) =>
