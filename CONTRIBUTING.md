@@ -19,7 +19,7 @@ cd web && pnpm dev:all
 # Python tests
 uv run pytest -m "not ffmpeg"
 
-# Lint / typecheck (optional locally; CI runs ruff + pytest + pnpm build on push/PR)
+# Lint / typecheck (optional locally; CI planned — see docs/ROADMAP.md)
 uv run ruff check .
 cd web && pnpm build
 ```
