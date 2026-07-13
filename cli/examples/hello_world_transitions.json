@@ -1,0 +1,70 @@
+{
+  "title": "Hello, World! — Two Tracks with Transition",
+  "description": "Two tracks: 'Hello' fades out while 'World' fades in, overlapping for 1.5s.",
+  "width": 1280,
+  "height": 720,
+  "fps": 24.0,
+  "duration": 6.0,
+  "tracks": [
+    {
+      "clip_type": "std-skia-track",
+      "id": "track-hello",
+      "start": 0.0,
+      "duration": 4.5,
+      "transition_out": {
+        "type": "fade",
+        "duration": 1.5,
+        "easing": "ease_in_out"
+      },
+      "clips": [
+        {
+          "clip_type": "std-solid-background",
+          "id": "bg-1",
+          "start": 0.0,
+          "color": "primary"
+        },
+        {
+          "clip_type": "std-static-text",
+          "id": "text-hello",
+          "start": 0.0,
+          "text": "Hello",
+          "color": "neutral",
+          "typography_role": "display_large",
+          "offset_x": 0.5,
+          "offset_y": 0.5,
+          "align": "center"
+        }
+      ]
+    },
+    {
+      "clip_type": "std-skia-track",
+      "id": "track-world",
+      "start": 3.0,
+      "duration": 3.0,
+      "transition_in": {
+        "type": "fade",
+        "duration": 1.5,
+        "easing": "ease_in_out"
+      },
+      "clips": [
+        {
+          "clip_type": "std-solid-background",
+          "id": "bg-2",
+          "start": 0.0,
+          "color": "secondary"
+        },
+        {
+          "clip_type": "std-static-text",
+          "id": "text-world",
+          "start": 0.0,
+          "text": "World",
+          "color": "neutral",
+          "typography_role": "display_large",
+          "offset_x": 0.5,
+          "offset_y": 0.5,
+          "align": "center"
+        }
+      ]
+    }
+  ]
+}

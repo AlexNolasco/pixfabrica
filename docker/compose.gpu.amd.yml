@@ -1,0 +1,20 @@
+# AMD GPU overlay (Linux host with amdgpu + Mesa). Mutually exclusive with compose.gpu.yml.
+# Usage:
+#   getent group render | cut -d: -f3   # add to docker/.env as GPU_RENDER_GID
+#   docker compose --env-file docker/.env \
+#     -f docker/compose.yml -f docker/compose.gpu.amd.yml up --build
+
+services:
+  api:
+    build:
+      args:
+        GL_VENDOR: mesa
+    devices:
+      - /dev/dri:/dev/dri
+    device_cgroup_rules:
+      - "c 226:* rmw"
+    group_add:
+      - "${GPU_RENDER_GID:?Set GPU_RENDER_GID in docker/.env — run: getent group render | cut -d: -f3}"
+    environment:
+      PIXFABRICA_GL_BACKEND: egl
+      EGL_PLATFORM: surfaceless

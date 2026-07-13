@@ -1,0 +1,56 @@
+{
+  "version": 1,
+  "families": [
+    {
+      "id": "inter",
+      "family": "Inter",
+      "label": "Inter",
+      "category": "sans",
+      "weights": [
+        { "value": 400, "source": "Inter-Regular.ttf" },
+        { "value": 500, "source": "Inter-Medium.ttf" },
+        { "value": 700, "source": "Inter-Bold.ttf" }
+      ]
+    },
+    {
+      "id": "jetbrains-mono",
+      "family": "JetBrains Mono",
+      "label": "JetBrains Mono",
+      "category": "mono",
+      "weights": [
+        { "value": 400, "source": "JetBrainsMono-Regular.ttf" }
+      ]
+    },
+    {
+      "id": "noto-sans-sc",
+      "family": "Noto Sans SC",
+      "label": "Noto Sans SC",
+      "category": "sans",
+      "weights": [
+        { "value": 400, "source": "NotoSansCJKsc-Regular.otf" },
+        { "value": 700, "source": "NotoSansCJKsc-Bold.otf" }
+      ]
+    },
+    {
+      "id": "noto-sans-jp",
+      "family": "Noto Sans JP",
+      "label": "Noto Sans JP",
+      "category": "sans",
+      "weights": [
+        { "value": 400, "source": "NotoSansCJKjp-Regular.otf" },
+        { "value": 700, "source": "NotoSansCJKjp-Bold.otf" }
+      ]
+    },
+    {
+      "id": "museo-moderno",
+      "family": "MuseoModerno",
+      "label": "Museo Moderno",
+      "category": "sans",
+      "weights": [
+        { "value": 400, "source": "MuseoModerno-Regular.ttf" },
+        { "value": 500, "source": "MuseoModerno-Medium.ttf" },
+        { "value": 700, "source": "MuseoModerno-Bold.ttf" }
+      ]
+    }
+  ]
+}

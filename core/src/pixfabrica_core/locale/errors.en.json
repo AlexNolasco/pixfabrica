@@ -1,0 +1,11 @@
+{
+  "unknown_plugin": "Unknown clip type '{clip_type}'. Is the plugin installed?",
+  "invalid_parameter": "Invalid parameter '{field}': {msg}",
+  "missing_asset": "Asset not found: '{path}'. {detail}",
+  "ffmpeg_failure": "FFmpeg encoding failed: {detail}",
+  "analysis_failed": "Audio analysis failed for '{source}': {detail}",
+  "cancelled": "Render cancelled.",
+  "output_write_error": "Cannot write output to '{path}': {detail}",
+  "schema_version_mismatch": "Job schema version {job_version} is not supported (renderer supports version {supported}).",
+  "gl_unavailable": "This project uses GL tracks or GPU effects, but OpenGL is not available on this host. {detail}"
+}

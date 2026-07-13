@@ -1,0 +1,33 @@
+[project]
+name = "pixfabrica-std"
+version = "0.1.0"
+requires-python = ">=3.12,<3.13"
+authors = [
+    { name = "Alex Nolasco" }
+]
+dependencies = [
+    "numpy>=2.0.0",
+    "av>=14.0.0",
+    "colorthief>=0.2.1",
+    "moderngl>=5.12.0",
+    "pillow>=10.0.0",
+    "pixfabrica-core[audio]>=0.1.0",
+    "pygltflib>=1.16.0",
+    "skia-python>=144.0.post2",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/pixfabrica_std"]
+
+[tool.hatch.build.targets.wheel.force-include]
+"src/pixfabrica_std/mesh/resources" = "pixfabrica_std/mesh/resources"
+"src/pixfabrica_std/palette" = "pixfabrica_std/palette"
+"src/pixfabrica_std/background/resources" = "pixfabrica_std/background/resources"
+"src/pixfabrica_std/player/resources" = "pixfabrica_std/player/resources"
+
+[project.entry-points."pixfabrica.nodes"]
+std = "pixfabrica_std:Plugin"

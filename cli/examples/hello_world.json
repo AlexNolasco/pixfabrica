@@ -1,0 +1,34 @@
+{
+  "title": "Hello, World!",
+  "description": "Minimal render example — solid background + centred text.",
+  "width": 1280,
+  "height": 720,
+  "fps": 24.0,
+  "duration": 5.0,
+  "tracks": [
+    {
+      "clip_type": "std-skia-track",
+      "id": "track-1",
+      "start": 0.0,
+      "clips": [
+        {
+          "clip_type": "std-solid-background",
+          "id": "bg-1",
+          "start": 0.0,
+          "color": "background"
+        },
+        {
+          "clip_type": "std-static-text",
+          "id": "text-1",
+          "start": 0.0,
+          "text": "Hello, World!",
+          "color": "neutral",
+          "typography_role": "title_large",
+          "offset_x": 0.5,
+          "offset_y": 0.5,
+          "align": "center"
+        }
+      ]
+    }
+  ]
+}

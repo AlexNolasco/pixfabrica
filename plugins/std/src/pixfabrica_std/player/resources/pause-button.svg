@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+  <circle cx="12" cy="12" r="10" fill="__BUTTON__"/>
+  <rect x="8" y="7" width="3" height="10" rx="0.5" fill="__GLYPH__"/>
+  <rect x="13" y="7" width="3" height="10" rx="0.5" fill="__GLYPH__"/>
+</svg>

@@ -1,0 +1,101 @@
+{
+    
+    "std-progress-bar-gl": {
+        "controls": {
+            "offset_x": {
+                "kind": "slider",
+                "show_as": "anchor",
+                "axis": "x",
+                "step": 0.01
+            },
+            "width": {
+                "kind": "slider",
+                "show_as": "percent",
+                "step": 0.01
+            },
+            "angle": {
+                "kind": "slider",
+                "show_as": "rotation",
+                "minimum": -89.0,
+                "maximum": 89.0,
+                "presets": [-45, -15, -5, 0, 5, 15, 45],
+                "step": 1.0
+            }
+        }
+    },
+    "std-sweep-lines-gl" : {
+        "controls": {
+            "angle": {
+                "kind": "slider",
+                "show_as": "rotation",
+                "minimum": -89.0,
+                "maximum": 89.0,
+                "presets": [-45, -15, -5, 0, 5, 15, 45],
+                "step": 1.0
+            }
+        }
+    },
+    "std-sweep-lines": {
+        "controls": {
+            "angle": {
+                "kind": "slider",
+                "show_as": "rotation",
+                "minimum": -89.0,
+                "maximum": 89.0,
+                "presets": [-45, -15, -5, 0, 5, 15, 45],
+                "step": 1.0
+            }
+        }
+    },
+    "std-gltf-mesh": {
+        "controls": {
+            "camera_azimuth": {
+                "kind": "camera_orbit"
+            },
+            "camera_elevation": {
+                "kind": "hidden"
+            },
+            "light_azimuth": {
+                "kind": "camera_orbit",
+                "variant": "light"
+            },
+            "light_elevation": {
+                "kind": "hidden"
+            }
+        }
+    },
+    "std-pixpal-mesh": {
+        "controls": {
+            "camera_azimuth": {
+                "kind": "camera_orbit"
+            },
+            "camera_elevation": {
+                "kind": "hidden"
+            },
+            "light_azimuth": {
+                "kind": "camera_orbit",
+                "variant": "light"
+            },
+            "light_elevation": {
+                "kind": "hidden"
+            }
+        }
+    },
+    "std-pixpal-shapekey-mesh": {
+        "controls": {
+            "camera_azimuth": {
+                "kind": "camera_orbit"
+            },
+            "camera_elevation": {
+                "kind": "hidden"
+            },
+            "light_azimuth": {
+                "kind": "camera_orbit",
+                "variant": "light"
+            },
+            "light_elevation": {
+                "kind": "hidden"
+            }
+        }
+    }
+}

@@ -1,0 +1,26 @@
+# Ignore binaries until explicitly added (run fonts build after dropping .ttf files)
+*.ttf
+*.otf
+*.woff
+*.woff2
+
+# Keep manifest, docs, and bundled OFL families
+!manifest.json
+!README.md
+!.gitignore
+!Inter-Regular.ttf
+!Inter-Medium.ttf
+!Inter-Bold.ttf
+!Inter-Regular.woff2
+!Inter-Medium.woff2
+!Inter-Bold.woff2
+!JetBrainsMono-Regular.ttf
+!JetBrainsMono-Regular.woff2
+!MuseoModerno-Regular.ttf
+!MuseoModerno-Medium.ttf
+!MuseoModerno-Bold.ttf
+!MuseoModerno-Regular.woff2
+!MuseoModerno-Medium.woff2
+!MuseoModerno-Bold.woff2
+!OFL-MuseoModerno.txt
+

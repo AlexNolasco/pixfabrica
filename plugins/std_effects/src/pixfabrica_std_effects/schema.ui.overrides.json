@@ -1,0 +1,21 @@
+{
+  "std-shake-skia": {
+    "sections": [
+      {
+        "id": "parameters",
+        "title_key": "ui.effect.std-shake-skia.section.parameters",
+        "fields": ["intensity", "rotation", "frequency"]
+      },
+      {
+        "id": "timing",
+        "title_key": "ui.section.timing",
+        "fields": ["start", "duration", "enabled"]
+      }
+    ],
+    "controls": {
+      "seed": {
+        "kind": "hidden"
+      }
+    }
+  }
+}

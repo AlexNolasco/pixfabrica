@@ -1,0 +1,71 @@
+# syntax=docker/dockerfile:1
+
+# Builder: install API stack into .venv (editable workspace installs; no CLI).
+FROM python:3.12-slim-bookworm AS builder
+
+COPY --from=ghcr.io/astral-sh/uv:latest /uv /usr/local/bin/uv
+
+WORKDIR /app
+
+COPY pyproject.toml uv.lock ./
+COPY core/pyproject.toml core/pyproject.toml
+COPY api/pyproject.toml api/pyproject.toml
+COPY renderer/pyproject.toml renderer/pyproject.toml
+COPY plugins/std/pyproject.toml plugins/std/pyproject.toml
+COPY plugins/std_effects/pyproject.toml plugins/std_effects/pyproject.toml
+
+COPY core/ core/
+COPY api/ api/
+COPY renderer/ renderer/
+COPY plugins/std/ plugins/std/
+COPY plugins/std_effects/ plugins/std_effects/
+
+ENV UV_COMPILE_BYTECODE=1 \
+    UV_LINK_MODE=copy \
+    UV_PROJECT_ENVIRONMENT=/app/.venv
+
+# Omit pixfabrica-cli (not needed to run the API).
+RUN uv sync --package pixfabrica-api --package pixfabrica-std-effects --no-dev --frozen
+
+FROM python:3.12-slim-bookworm AS runtime
+
+# GL_VENDOR: none (CPU demo, no GPU libs), nvidia (NVIDIA Container Toolkit), mesa (AMD /dev/dri)
+ARG GL_VENDOR=none
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    ffmpeg \
+    libegl1 \
+    libegl1-mesa \
+    libgl1 \
+    libglvnd0 \
+    libglib2.0-0 \
+    libgomp1 \
+    libsndfile1 \
+    && if [ "$GL_VENDOR" = "mesa" ]; then \
+        apt-get install -y --no-install-recommends libgbm1 libgl1-mesa-dri; \
+    fi \
+    && rm -rf /var/lib/apt/lists/* \
+    && if [ "$GL_VENDOR" = "nvidia" ]; then \
+        mkdir -p /usr/share/glvnd/egl_vendor.d \
+        && printf '%s\n' \
+            '{"file_format_version":"1.0.0","ICD":{"library_path":"libEGL_nvidia.so.0"}}' \
+            > /usr/share/glvnd/egl_vendor.d/10_nvidia.json; \
+    fi
+
+WORKDIR /app
+
+COPY --from=builder /app/.venv /app/.venv
+# Editable installs point at workspace source under /app.
+COPY --from=builder /app/core /app/core
+COPY --from=builder /app/api /app/api
+COPY --from=builder /app/renderer /app/renderer
+COPY --from=builder /app/plugins/std /app/plugins/std
+COPY --from=builder /app/plugins/std_effects /app/plugins/std_effects
+COPY assets/fonts/ assets/fonts/
+COPY api/media/gallery/ api/media/gallery/
+RUN mkdir -p api/media/gallery
+
+ENV PATH="/app/.venv/bin:$PATH"
+
+EXPOSE 8000
+
+CMD ["uvicorn", "pixfabrica_api.main:app", "--host", "0.0.0.0", "--port", "8000"]

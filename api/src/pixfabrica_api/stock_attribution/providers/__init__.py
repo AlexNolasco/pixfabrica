@@ -1,0 +1,1 @@
+"""Stock provider attribution formatters."""

@@ -1,0 +1,292 @@
+/**
+ * @xzdarcy/react-timeline-editor publishes ESM without bundled LESS/CSS.
+ * Without flex layout on `.timeline-editor` and flex-fill on `.timeline-editor-edit-area`,
+ * react-virtualized AutoSizer gets height 0 and the timeline grid stays blank.
+ * (ScrollSync renders a Fragment, so TimeArea + EditArea are direct children of `.timeline-editor`.)
+ */
+
+.timeline-editor {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 0;
+  width: 100%;
+  overflow: hidden;
+  position: relative;
+  font-size: 12px;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.timeline-editor-time-area {
+  flex: 0 0 auto;
+  height: 32px;
+  position: relative;
+}
+
+/* Library ships this overlay in JS but not in our bundled CSS — must sit above the grid. */
+.timeline-editor-time-area-interact {
+  position: absolute;
+  left: 0;
+  top: 0;
+  z-index: 2;
+  cursor: ew-resize;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.timeline-editor-time-area .ReactVirtualized__Grid {
+  outline: none;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+/* react-virtualized sets overflow:hidden inline on the inner scroll container and
+   each cell div. Override so the rightmost tick label can bleed past cell bounds
+   instead of being cut off. The outer Grid retains its overflow for scroll-sync. */
+.timeline-editor-time-area .ReactVirtualized__Grid__innerScrollContainer,
+.timeline-editor-time-area .ReactVirtualized__Grid__innerScrollContainer > div {
+  overflow: visible !important;
+}
+
+.timeline-editor-time-area .ReactVirtualized__Grid::-webkit-scrollbar {
+  display: none;
+  width: 0;
+  height: 0;
+}
+
+.timeline-editor-time-unit {
+  border-right: 1px solid color-mix(in oklab, var(--border) 85%, transparent);
+  position: relative;
+  box-sizing: content-box;
+  height: 4px !important;
+  bottom: 0 !important;
+  top: auto !important;
+  user-select: none;
+  -webkit-user-select: none;
+  pointer-events: none;
+}
+
+.timeline-editor-time-unit-big {
+  height: 8px !important;
+}
+
+.timeline-editor-time-unit-scale {
+  color: var(--muted-foreground);
+  position: absolute;
+  right: 0;
+  top: 0;
+  transform: translate(50%, -100%);
+  user-select: none;
+  -webkit-user-select: none;
+  pointer-events: none;
+}
+
+.timeline-editor-edit-area {
+  flex: 1 1 auto;
+  min-height: 0;
+  /* No top gap — keeps lanes aligned with Pixfabrica track labels (library LESS used 10px margin). */
+  overflow: hidden;
+  position: relative;
+}
+
+.timeline-editor-edit-area .ReactVirtualized__Grid {
+  outline: none !important;
+  scrollbar-width: thin;
+  scrollbar-color: color-mix(in oklab, var(--muted-foreground) 45%, transparent) transparent;
+}
+
+.timeline-editor-edit-area .ReactVirtualized__Grid::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+.timeline-editor-edit-area .ReactVirtualized__Grid::-webkit-scrollbar-thumb {
+  background: color-mix(in oklab, var(--muted-foreground) 38%, transparent);
+  border-radius: 9999px;
+}
+
+.timeline-editor-edit-area .ReactVirtualized__Grid::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.timeline-editor:hover .timeline-editor-edit-area .ReactVirtualized__Grid::-webkit-scrollbar-thumb {
+  background: color-mix(in oklab, var(--muted-foreground) 55%, transparent);
+}
+
+.timeline-editor-edit-row {
+  box-sizing: border-box;
+  cursor: ew-resize;
+  user-select: none;
+  -webkit-user-select: none;
+  border-bottom: 1px solid color-mix(in oklab, var(--border) 65%, transparent);
+  background-repeat: no-repeat, repeat;
+  background-image:
+    linear-gradient(color-mix(in oklab, var(--muted) 92%, var(--background)), color-mix(in oklab, var(--muted) 92%, var(--background))),
+    linear-gradient(
+      90deg,
+      color-mix(in oklab, var(--border) 55%, transparent) 1px,
+      transparent 0
+    );
+}
+
+.timeline-editor-cursor {
+  cursor: ew-resize;
+  position: absolute;
+  top: 32px;
+  height: calc(100% - 32px);
+  box-sizing: border-box;
+  border-left: 1px solid var(--primary);
+  border-right: 1px solid var(--primary);
+  transform: translateX(-25%) scaleX(0.5);
+}
+
+.timeline-editor-cursor-top {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translate(-50%, 0) scaleX(2);
+  margin: auto;
+}
+
+.timeline-editor-cursor-area {
+  width: 16px;
+  height: 100%;
+  cursor: ew-resize;
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+/* Clip blocks when tracks have timeline actions */
+.timeline-editor-action {
+  position: absolute;
+  left: 0;
+  top: 0;
+  border-radius: 4px;
+  background-color: color-mix(in oklab, var(--primary) 25%, var(--muted));
+  box-sizing: border-box;
+}
+
+/**
+ * Single vertical scroll: timeline grid drives scroll; labels column matches via JS.
+ * Hide scrollbar on labels so only the subtle timeline grids scrollbars show.
+ */
+.timeline-pane-track-labels {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.timeline-pane-track-labels::-webkit-scrollbar {
+  display: none;
+  width: 0;
+  height: 0;
+}
+
+/* Track span band — per type; clips use higher z-index */
+.timeline-editor-action-effect-pixfabrica-track-span-skia,
+.timeline-editor-action-effect-pixfabrica-track-span-gl,
+.timeline-editor-action-effect-pixfabrica-track-span-audio,
+.timeline-editor-action-effect-pixfabrica-track-span-post {
+  border: 1px solid color-mix(in oklab, var(--border) 65%, transparent);
+  opacity: 0.9;
+  z-index: 0;
+  cursor: grab;
+}
+.timeline-editor-action-effect-pixfabrica-track-span-skia:active,
+.timeline-editor-action-effect-pixfabrica-track-span-gl:active,
+.timeline-editor-action-effect-pixfabrica-track-span-audio:active,
+.timeline-editor-action-effect-pixfabrica-track-span-post:active {
+  cursor: grabbing;
+}
+
+.timeline-editor-action-effect-pixfabrica-track-span-skia  { background-color: color-mix(in oklab, #3b82f6 18%, var(--muted)); }
+.timeline-editor-action-effect-pixfabrica-track-span-gl    { background-color: color-mix(in oklab, #a855f7 18%, var(--muted)); }
+.timeline-editor-action-effect-pixfabrica-track-span-audio { background-color: color-mix(in oklab, #22c55e 18%, var(--muted)); }
+.timeline-editor-action-effect-pixfabrica-track-span-post  { background-color: color-mix(in oklab, #f97316 18%, var(--muted)); }
+
+.timeline-editor-action-effect-pixfabrica-clip {
+  z-index: 1;
+  cursor: grab;
+}
+.timeline-editor-action-effect-pixfabrica-clip:active {
+  cursor: grabbing;
+}
+
+.timeline-editor-action-effect-pixfabrica-clip-broken {
+  z-index: 1;
+  cursor: grab;
+  background-color: color-mix(in oklab, var(--destructive) 20%, var(--muted));
+  box-shadow: inset 0 0 0 1px color-mix(in oklab, var(--destructive) 40%, transparent);
+}
+.timeline-editor-action-effect-pixfabrica-clip-broken:active {
+  cursor: grabbing;
+}
+
+.timeline-editor-action-effect-pixfabrica-clip-broken .timeline-clip-label {
+  color: var(--destructive-foreground, var(--foreground));
+}
+
+.timeline-editor-action-effect-pixfabrica-clip-invalid-params {
+  z-index: 1;
+  cursor: grab;
+  background-color: color-mix(in oklab, #eab308 20%, var(--muted));
+  box-shadow: inset 0 0 0 1px color-mix(in oklab, #eab308 40%, transparent);
+}
+.timeline-editor-action-effect-pixfabrica-clip-invalid-params:active {
+  cursor: grabbing;
+}
+
+.timeline-editor-action-effect-pixfabrica-clip-invalid-params .timeline-clip-label {
+  color: var(--foreground);
+}
+
+.timeline-editor-action-effect-pixfabrica-clip-missing-asset {
+  z-index: 1;
+  cursor: grab;
+  background-color: color-mix(in oklab, #f97316 20%, var(--muted));
+  box-shadow: inset 0 0 0 1px color-mix(in oklab, #f97316 40%, transparent);
+}
+.timeline-editor-action-effect-pixfabrica-clip-missing-asset:active {
+  cursor: grabbing;
+}
+
+.timeline-editor-action-effect-pixfabrica-clip-missing-asset .timeline-clip-label {
+  color: var(--foreground);
+}
+
+.timeline-clip-label {
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+/* Resize handle positioning — the library CSS is not bundled so we must supply these */
+.timeline-editor-action .timeline-editor-action-left-stretch,
+.timeline-editor-action .timeline-editor-action-right-stretch {
+  position: absolute;
+  top: 0;
+  width: 10px;
+  height: 100%;
+  cursor: ew-resize;
+  background-color: color-mix(in oklab, var(--muted-foreground) 20%, transparent);
+  transition: background-color 0.15s ease;
+  z-index: 2;
+}
+.timeline-editor-action .timeline-editor-action-left-stretch  { left: 0; border-radius: 4px 0 0 4px; }
+.timeline-editor-action .timeline-editor-action-right-stretch { right: 0; border-radius: 0 4px 4px 0; }
+
+.timeline-editor-action .timeline-editor-action-left-stretch:hover,
+.timeline-editor-action .timeline-editor-action-right-stretch:hover {
+  background-color: color-mix(in oklab, var(--primary) 60%, transparent);
+}
+/* Suppress the tiny nearly-invisible arrow pseudo-elements */
+.timeline-editor-action .timeline-editor-action-left-stretch:after,
+.timeline-editor-action .timeline-editor-action-right-stretch:after {
+  display: none;
+}
+
+.timeline-clip-overlap {
+  box-shadow: inset 0 0 0 1px color-mix(in oklab, var(--destructive) 70%, transparent);
+  background-color: color-mix(in oklab, var(--primary) 20%, var(--muted)) !important;
+}

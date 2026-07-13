@@ -1,0 +1,23 @@
+[
+  {
+    "id": "drums",
+    "label": "Drums",
+    "file": "sources/drums.mp3",
+    "sourceUrl": "https://pixabay.com/",
+    "license": "Pixabay Content License"
+  },
+  {
+    "id": "symphony",
+    "label": "Symphony",
+    "file": "sources/symphony.mp3",
+    "sourceUrl": "https://pixabay.com/",
+    "license": "Pixabay Content License"
+  },
+  {
+    "id": "ambient",
+    "label": "Ambient",
+    "file": "sources/ambient.mp3",
+    "sourceUrl": "https://pixabay.com/",
+    "license": "Pixabay Content License"
+  }
+]

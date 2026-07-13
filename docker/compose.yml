@@ -1,0 +1,60 @@
+# Pixfabrica local demo — web (nginx + SPA) + api (FastAPI + renderer).
+# From repo root:
+#   cp docker/.env.example docker/.env
+#   docker compose --env-file docker/.env -f docker/compose.yml up --build
+
+services:
+  web:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.web
+      args:
+        VITE_API_BASE_URL: /api
+        VITE_API_TOKEN: ${API_TOKEN:-pixfabrica-dev-token}
+    ports:
+      - "${HOST_PORT:-8080}:8080"
+    depends_on:
+      api:
+        condition: service_started
+    restart: unless-stopped
+
+  api:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.api
+    environment:
+      API_TOKEN: ${API_TOKEN:-pixfabrica-dev-token}
+      PUBLIC_API_URL: http://localhost:${HOST_PORT:-8080}/api
+      ALLOWED_ORIGINS: http://localhost:${HOST_PORT:-8080}
+      PIXFABRICA_REPO_ROOT: /app
+      PIXFABRICA_GALLERY_ROOT: /app/api/media/gallery
+      PIXFABRICA_MEDIA_ROOT: /data/media
+      PIXFABRICA_JOBS_ROOT: /data/jobs
+      PIXFABRICA_CACHE_DIR: /data/cache
+      PIXFABRICA_USER_FONTS_DIR: /data/user-fonts
+      PIXFABRICA_TEMP_DIR: /data/temp
+      PIXFABRICA_GALLERY_PUBLISH: "0"
+      PIXFABRICA_OLLAMA_BASE_URL: ${PIXFABRICA_OLLAMA_BASE_URL:-}
+      PIXFABRICA_MAX_DURATION_S: "3600"
+      PIXFABRICA_MAX_WIDTH: "3840"
+      PIXFABRICA_MAX_HEIGHT: "2160"
+      PIXFABRICA_MAX_FPS: "60"
+      PIXFABRICA_CATALOG_EXCLUDED_LICENSES: ${PIXFABRICA_CATALOG_EXCLUDED_LICENSES:-CC-BY-NC-SA-3.0,CC-BY-NC-SA-4.0}
+      PIXFABRICA_DEFAULT_LOCALE: ${PIXFABRICA_DEFAULT_LOCALE:-}
+    volumes:
+      - ${PIXFABRICA_DATA_DIR:-./pixfabrica-data}:/data
+    depends_on:
+      ollama:
+        condition: service_started
+        required: false
+    restart: unless-stopped
+
+  ollama:
+    profiles: [compose]
+    image: ollama/ollama:latest
+    volumes:
+      - ollama-data:/root/.ollama
+    restart: unless-stopped
+
+volumes:
+  ollama-data:

@@ -1,0 +1,38 @@
+{
+  "version": 1,
+  "samples": [
+    {
+      "id": "drums",
+      "label": "Drums",
+      "seconds": 45.0,
+      "fps": 30.0,
+      "analyzer": "stem",
+      "audio": "/preview-samples/drums/audio.mp3",
+      "timeline": "/preview-samples/drums/timeline.npz",
+      "sourceUrl": "https://pixabay.com/",
+      "license": "Pixabay Content License"
+    },
+    {
+      "id": "symphony",
+      "label": "Symphony",
+      "seconds": 45.0,
+      "fps": 30.0,
+      "analyzer": "stem",
+      "audio": "/preview-samples/symphony/audio.mp3",
+      "timeline": "/preview-samples/symphony/timeline.npz",
+      "sourceUrl": "https://pixabay.com/",
+      "license": "Pixabay Content License"
+    },
+    {
+      "id": "ambient",
+      "label": "Ambient",
+      "seconds": 45.0,
+      "fps": 30.0,
+      "analyzer": "stem",
+      "audio": "/preview-samples/ambient/audio.mp3",
+      "timeline": "/preview-samples/ambient/timeline.npz",
+      "sourceUrl": "https://pixabay.com/",
+      "license": "Pixabay Content License"
+    }
+  ]
+}

@@ -1,0 +1,1 @@
+$p=(Get-NetTCPConnection -LocalPort 5173 -State Listen -ErrorAction SilentlyContinue).OwningProcess;if($p){$n=(Get-Process -Id $p).ProcessName;Write-Host "Port 5173 -> PID $p ($n)";if((Read-Host "Kill it? [y/N]") -match '^[Yy]$'){Stop-Process -Id $p -Force;Write-Host "Killed PID $p"}}else{Write-Host "Nothing listening on 5173"}

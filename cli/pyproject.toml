@@ -1,0 +1,29 @@
+# Boundary: do not add the web/ SPA as a workspace dependency or import it as Python.
+# ``pixfabrica web …`` maintenance commands may write to web/ via explicit paths
+# only (see scripts/check_cli_no_web.py).
+
+[project]
+name = "pixfabrica-cli"
+version = "0.1.0"
+requires-python = ">=3.12,<3.13"
+dependencies = [
+    "httpx>=0.27",
+    "typer>=0.12",
+    "rich>=13",
+    "pixfabrica-core[fonts]",
+    "pixfabrica-renderer",
+]
+
+[tool.uv.sources]
+pixfabrica-core = { workspace = true }
+pixfabrica-renderer = { workspace = true }
+
+[project.scripts]
+pixfabrica = "pixfabrica_cli.main:app"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/pixfabrica_cli"]

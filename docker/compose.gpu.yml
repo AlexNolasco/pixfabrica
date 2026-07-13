@@ -1,0 +1,17 @@
+# NVIDIA GPU overlay (Linux + NVIDIA Container Toolkit, or Docker Desktop with GPU).
+# Mutually exclusive with compose.gpu.amd.yml.
+# Usage:
+#   docker compose --env-file docker/.env \
+#     -f docker/compose.yml -f docker/compose.gpu.yml up --build
+
+services:
+  api:
+    build:
+      args:
+        GL_VENDOR: nvidia
+    gpus: all
+    environment:
+      NVIDIA_VISIBLE_DEVICES: all
+      NVIDIA_DRIVER_CAPABILITIES: all
+      PIXFABRICA_GL_BACKEND: egl
+      EGL_PLATFORM: surfaceless

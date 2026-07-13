@@ -1,0 +1,65 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+.venv/
+.venv*/
+dist/
+build/
+*.egg-info/
+.eggs/
+*.egg
+
+# pyright / mypy
+.pyright/
+.mypy_cache/
+pyrightconfig.json
+
+# pytest
+.pytest_cache/
+htmlcov/
+.coverage
+coverage.xml
+
+# ruff
+.ruff_cache/
+
+# Node / web
+web/node_modules/
+web/dist/
+web/.vite/
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editor / AI tooling (local only)
+.cursor/
+.claude/
+.vscode/settings.json
+.idea/
+*.swp
+*.swo
+
+# Community / sample plugins (separate git repos cloned here)
+plugins/pixfabrica-std-sample/
+plugins/pixfabrica-std-effects-sample/
+
+# Render output / temp
+*.mp4
+*.wav
+*.tmp
+output/
+frames/
+
+#uploads
+media/
+jobs/
+pixfabrica-data/
+docker/.env
+api/.env
+!api/media/
+api/media/*
+!api/media/gallery/
+!api/media/gallery/**
