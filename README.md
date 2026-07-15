@@ -14,7 +14,10 @@ Licensed under [MIT](LICENSE).
 - Live preview and MP4 export via FFmpeg
 - Optional compose agent when Ollama is available (local / Docker profile)
 
-## Develop locally
+## Develop locally (recommended)
+
+Use this path for **realtime preview and GPU / OpenGL**.
+On Windows and macOS it is the supported way to get `gl.available: true`.
 
 **Windows**
 
@@ -44,16 +47,31 @@ Opens the editor at **http://localhost:5173** (API on **8000**).
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) for tests, lint, and PR expectations.
 
-## Docker
+## Docker (optional)
 
-Local demo at **http://localhost:8080** (CPU / Skia-friendly; `gl.available: false` without a GPU overlay).
+Docker Compose packages the editor + API without installing uv, pnpm, or FFmpeg on the host.
+It is a good fit for **Linux demos and VPS-style hosts**.
+
+It is **not** the path for Windows/macOS GPU Play:
+Docker Desktop often stays on software GL (`llvmpipe`).
+Use **`run-all`** above when you need realtime OpenGL.
+
+**CPU / Skia demo** at **http://localhost:8080**:
 
 ```bash
 cp docker/.env.example docker/.env
 docker compose --env-file docker/.env -f docker/compose.yml up --build
 ```
 
-**GPU in Docker:** Linux + NVIDIA Container Toolkit - add `-f docker/compose.gpu.yml` and confirm `/api/health` → `gl.available: true`. On Windows/macOS Docker Desktop, use **`run-all`** for OpenGL; compose stays CPU-only. Details: **[docker/README.md](docker/README.md)**.
+**NVIDIA GPU (Linux + [NVIDIA Container Toolkit](https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/install-guide.html)):**
+
+```bash
+docker compose --env-file docker/.env \
+  -f docker/compose.yml -f docker/compose.gpu.yml up --build
+```
+
+Confirm **http://localhost:8080/api/health** → `gl.available: true` and a real NVIDIA renderer.
+Full details: **[docker/README.md](docker/README.md)**.
 
 ## Documentation
 

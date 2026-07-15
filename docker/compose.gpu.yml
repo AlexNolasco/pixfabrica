@@ -1,4 +1,5 @@
-# NVIDIA GPU overlay (Linux + NVIDIA Container Toolkit, or Docker Desktop with GPU).
+# NVIDIA GPU overlay (Linux + NVIDIA Container Toolkit).
+# Windows/macOS Docker Desktop: usually software GL only — prefer host run-all for OpenGL.
 # Mutually exclusive with compose.gpu.amd.yml.
 # Usage:
 #   docker compose --env-file docker/.env \

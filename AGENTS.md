@@ -80,7 +80,7 @@ Local API token: `pixfabrica-dev-token` (see [api/README.md](api/README.md)).
 | Web UI / timeline / preview | [web/README.md](web/README.md) — see **Web** below |
 | Plugins / clips / effects | [plugins/README.md](plugins/README.md) — see **Plugins** below |
 | System design / UI philosophy / plugin contract | [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) |
-| Docker / GPU demo | [docker/README.md](docker/README.md) |
+| Docker (Linux boxed demo; not Windows GPU Play) | [docker/README.md](docker/README.md) |
 
 Workspace members (root [pyproject.toml](pyproject.toml)): `core`, `api`, `renderer`, `cli`, `plugins/std`, `plugins/std_effects`.
 
