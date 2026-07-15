@@ -2,14 +2,24 @@
 
 Run the editor and API in containers — one browser URL, persistent data on the host.
 
-This replaces local `setup.sh` / `run-all.sh` when you prefer Docker over installing uv, pnpm, and FFmpeg on the host.
+## Who this is for
+
+| Use case | Use Docker? |
+|----------|-------------|
+| Linux boxed demo / VPS (skip installing uv, pnpm, FFmpeg) | Yes |
+| Linux + NVIDIA, want GL tracks in compose | Yes — add `compose.gpu.yml` |
+| Windows or macOS, realtime Play + OpenGL | **No** — use repo-root `run-all` instead |
+| Windows Docker Desktop “with GPU” | Expect CPU / `llvmpipe`; do not rely on it for GL |
+
+Native `run-all` is the supported path for local GPU preview on Windows and macOS.
+Docker here is optional packaging, especially for Linux hosts.
 
 ## Prerequisites
 
 | Requirement | Notes |
 |-------------|--------|
 | [Docker](https://docs.docker.com/get-docker/) + Compose v2 | `docker compose version` |
-| **GPU (recommended)** | **NVIDIA:** [NVIDIA Container Toolkit](https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/install-guide.html) on Linux, or Docker Desktop with GPU on Windows/macOS. **AMD:** Linux host with `amdgpu` + Mesa — see [GPU passthrough](#gpu-passthrough) |
+| **GPU (optional, Linux)** | **NVIDIA:** [NVIDIA Container Toolkit](https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/install-guide.html). **AMD:** Linux + `amdgpu` + Mesa — see [GPU passthrough](#gpu-passthrough) |
 | FFmpeg | Included in the API image |
 
 Without GPU passthrough, the stack still starts; `GET /health` reports `gl.available: false` and GL-heavy projects are blocked (same as local `doctor` without OpenGL).
@@ -41,9 +51,9 @@ Build arg `GL_VENDOR` in `docker/Dockerfile.api`:
 
 Check **http://localhost:8080/api/health** for `gl.available`, `gl.renderer`, and `ffmpeg`.
 
-### NVIDIA
+### NVIDIA (Linux)
 
-Requires [NVIDIA Container Toolkit](https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/install-guide.html) on Linux, or Docker Desktop with GPU support.
+Requires [NVIDIA Container Toolkit](https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/install-guide.html) on a Linux host.
 
 ```bash
 docker compose --env-file docker/.env \
@@ -52,6 +62,8 @@ docker compose --env-file docker/.env \
 
 If `gl.available` is false with `XOpenDisplay`, rebuild the API image and use this overlay (not the base compose file alone).
 
+On Windows/macOS Docker Desktop, this overlay usually still reports software GL.
+Use `run-all` on the host for OpenGL instead.
 ### AMD (Linux host)
 
 Requires a working **amdgpu** kernel driver and Mesa on the host. There is no AMD equivalent of NVIDIA Container Toolkit — pass **`/dev/dri`** into the container instead.
