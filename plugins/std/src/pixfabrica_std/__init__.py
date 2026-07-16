@@ -15,6 +15,7 @@ from pixfabrica_std.audio.star_pulse_gl import StarPulseGL
 from pixfabrica_std.audio.vu_meter import VuMeter
 from pixfabrica_std.audio.waveform_band import WaveformBand
 from pixfabrica_std.audio.waveform_bars import WaveformBars
+from pixfabrica_std.audio.waveform_raymarch_gl import WaveformRaymarchGL
 from pixfabrica_std.audio.wavy_lines_gl import WavyLinesGL
 from pixfabrica_std.background.animated_gradient_gl import AnimatedGradientGL
 
@@ -167,6 +168,7 @@ class Plugin:
         VuMeter,
         WaveformBand,
         WaveformBars,
+        WaveformRaymarchGL,
         WavyLinesGL,
         BackgroundImage,
         Image,

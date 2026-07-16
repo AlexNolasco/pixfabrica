@@ -904,6 +904,19 @@ register_icon(
 )
 
 register_icon(
+    "std-waveform-raymarch-gl",
+    StaticIconGenerator(
+        '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"'
+        ' fill="none" stroke="currentColor" stroke-width="2"'
+        ' stroke-linecap="round" stroke-linejoin="round">'
+        '<line x1="2" y1="12" x2="22" y2="12" stroke-opacity="0.3"/>'
+        '<path d="M2 9c2-2 3 2 5 0s3-2 5 0 3 2 5 0 3-2 5 0"/>'
+        '<path d="M2 15c2 2 3-2 5 0s3 2 5 0 3-2 5 0 3 2 5 0" stroke-opacity="0.5"/>'
+        "</svg>"
+    ),
+)
+
+register_icon(
     "std-eq-led-gl",
     StaticIconGenerator(
         '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"'
