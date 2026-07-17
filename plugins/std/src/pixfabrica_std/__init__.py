@@ -103,6 +103,7 @@ from pixfabrica_std.progress.time_counter import TimeCounter
 # text
 from pixfabrica_std.text.dynamic_text import DynamicText
 from pixfabrica_std.text.glow_text import GlowText
+from pixfabrica_std.text.lyrics_camera import LyricsCamera
 from pixfabrica_std.text.lyrics_caption import LyricsCaption
 from pixfabrica_std.text.lyrics_pop import LyricsPop
 from pixfabrica_std.text.marquee import Marquee
@@ -185,6 +186,7 @@ class Plugin:
         PixPalShapeKeyMeshGL,
         GlowText,
         LyricsCaption,
+        LyricsCamera,
         LyricsPop,
         Duotone,
         Glitch,

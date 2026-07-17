@@ -4198,7 +4198,11 @@
           "color",
           "offset_y",
           "speed",
+          "speed_reactivity",
+          "beat_punch",
           "brightness",
+          "brightness_reactivity",
+          "colorize",
           "luma_alpha",
           "quality",
           "smoothing"
@@ -4255,11 +4259,34 @@
         "maximum": 4.0,
         "step": 0.05
       },
+      "speed_reactivity": {
+        "kind": "slider",
+        "minimum": 0.0,
+        "maximum": 2.0,
+        "step": 0.05
+      },
+      "beat_punch": {
+        "kind": "slider",
+        "minimum": 0.0,
+        "maximum": 2.0,
+        "step": 0.05
+      },
       "brightness": {
         "kind": "slider",
         "minimum": 200.0,
         "maximum": 3000.0,
         "step": 10.0
+      },
+      "brightness_reactivity": {
+        "kind": "slider",
+        "minimum": 0.0,
+        "maximum": 2.0,
+        "step": 0.05
+      },
+      "colorize": {
+        "kind": "slider",
+        "show_as": "percent",
+        "step": 0.05
       },
       "luma_alpha": {
         "kind": "slider",
@@ -6588,6 +6615,170 @@
           "lower"
         ],
         "label_key_prefix": "clip.std-lyrics-caption.field.text_case.option"
+      }
+    }
+  },
+  "std-lyrics-camera": {
+    "schema_version": 1,
+    "custom_ui": null,
+    "sections": [
+      {
+        "id": "parameters",
+        "title_key": "ui.clip.std-lyrics-camera.section.parameters",
+        "fields": [
+          "source",
+          "typography_role",
+          "color",
+          "lyrics_offset",
+          "offset_x",
+          "offset_y",
+          "opacity",
+          "align",
+          "wrap_width",
+          "angle",
+          "pitch",
+          "context_lines",
+          "follow_speed",
+          "dof_strength"
+        ]
+      },
+      {
+        "id": "timing",
+        "title_key": "ui.section.timing",
+        "fields": [
+          "start",
+          "duration",
+          "enabled"
+        ]
+      }
+    ],
+    "controls": {
+      "id": {
+        "kind": "hidden",
+        "read_only": true
+      },
+      "start": {
+        "kind": "number",
+        "step": 0.1
+      },
+      "duration": {
+        "kind": "number",
+        "step": 0.1
+      },
+      "enabled": {
+        "kind": "toggle"
+      },
+      "source": {
+        "kind": "file",
+        "upload_kind": "lyrics",
+        "accept": [
+          ".lrc",
+          ".srt",
+          ".vtt",
+          ".json"
+        ],
+        "max_bytes": 5242880
+      },
+      "typography_role": {
+        "kind": "typography_role",
+        "options": [
+          "display_large",
+          "display_medium",
+          "display_small",
+          "title_large",
+          "title_medium",
+          "title_small",
+          "body_large",
+          "body_medium",
+          "body_small",
+          "label_large",
+          "label_medium",
+          "label_small",
+          "mono_large",
+          "mono_medium",
+          "mono_small"
+        ]
+      },
+      "color": {
+        "kind": "theme_or_color",
+        "nullable": false
+      },
+      "lyrics_offset": {
+        "kind": "number",
+        "step": 0.1
+      },
+      "offset_x": {
+        "kind": "slider",
+        "show_as": "anchor",
+        "axis": "x",
+        "step": 0.01
+      },
+      "offset_y": {
+        "kind": "slider",
+        "show_as": "anchor",
+        "axis": "y",
+        "step": 0.01
+      },
+      "opacity": {
+        "kind": "slider",
+        "show_as": "percent",
+        "step": 0.1
+      },
+      "align": {
+        "kind": "segmented_enum",
+        "options": [
+          "left",
+          "center",
+          "right"
+        ],
+        "label_key_prefix": "clip.std-lyrics-camera.field.align.option"
+      },
+      "wrap_width": {
+        "kind": "slider",
+        "minimum": 0.1,
+        "maximum": 1.0,
+        "step": 0.05
+      },
+      "angle": {
+        "kind": "slider",
+        "show_as": "rotation",
+        "minimum": -360.0,
+        "maximum": 360.0,
+        "presets": [
+          -90,
+          -45,
+          -15,
+          -5,
+          0,
+          5,
+          15,
+          45,
+          90
+        ],
+        "step": 1.0
+      },
+      "pitch": {
+        "kind": "slider",
+        "minimum": -35.0,
+        "maximum": 35.0,
+        "step": 1.0
+      },
+      "context_lines": {
+        "kind": "slider",
+        "minimum": 1,
+        "maximum": 12,
+        "step": 1.0
+      },
+      "follow_speed": {
+        "kind": "slider",
+        "minimum": 0.5,
+        "maximum": 30.0,
+        "step": 0.1
+      },
+      "dof_strength": {
+        "kind": "slider",
+        "show_as": "percent",
+        "step": 0.05
       }
     }
   },
@@ -10722,7 +10913,7 @@
           ".webm",
           ".mkv"
         ],
-        "max_bytes": 15728640,
+        "max_bytes": 20971520,
         "stock_browse": true
       },
       "loop": {
