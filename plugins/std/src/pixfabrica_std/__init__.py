@@ -57,6 +57,7 @@ from pixfabrica_std.effects.border_plasma import BorderPlasmaGL
 from pixfabrica_std.effects.digital_glitch import DigitalGlitch
 from pixfabrica_std.effects.duotone import Duotone
 from pixfabrica_std.effects.glitch import Glitch
+from pixfabrica_std.effects.interlaced_glitch import InterlacedGlitch
 from pixfabrica_std.effects.palette_cycle_gl import PaletteCycle
 from pixfabrica_std.effects.pixelate import Pixelate
 from pixfabrica_std.effects.scanlines import Scanlines
@@ -191,6 +192,7 @@ class Plugin:
         Duotone,
         Glitch,
         DigitalGlitch,
+        InterlacedGlitch,
         SpectrumGlitch,
         PaletteCycle,
         Gradient,

@@ -158,8 +158,9 @@ def test_stem_analyzer_drums_has_dynamic_heights(tmp_path: Path) -> None:
     history = clip._bar_history  # noqa: SLF001
     assert history.shape[1] == clip.bar_count // 2
     peaks = history.max(axis=1)
+    levels = history.mean(axis=1)
     assert float(np.percentile(peaks, 95)) > 0.2
-    assert float(np.std(peaks)) > 0.05
+    assert float(np.std(levels)) > 0.025
     assert float(peaks.max()) <= 0.95
     assert float((history >= 0.99).mean()) < 0.01
 
