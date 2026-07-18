@@ -7,6 +7,7 @@ from pixfabrica_std_effects.effects.saturation_gl import SaturationGL
 from pixfabrica_std_effects.effects.shake_skia import ShakeSkia
 from pixfabrica_std_effects.effects.signal_skia import SignalSkia
 from pixfabrica_std_effects.effects.sway_gl import SwayGL
+from pixfabrica_std_effects.effects.tvbug_gl import TvbugGL
 
 __all__ = ["Plugin"]
 
@@ -28,4 +29,5 @@ class Plugin:
         ShakeSkia,
         SignalSkia,
         SwayGL,
+        TvbugGL,
     ]
