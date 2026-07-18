@@ -29,6 +29,9 @@ web/node_modules/
 web/dist/
 web/.vite/
 
+# Pinokio runtime logs (generated under the launcher folder)
+pinokio/logs/
+
 # OS
 .DS_Store
 Thumbs.db

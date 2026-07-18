@@ -47,6 +47,18 @@ Opens the editor at **http://localhost:5173** (API on **8000**).
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) for tests, lint, and PR expectations.
 
+## Pinokio
+
+1-click install via [Pinokio](https://pinokio.co):
+
+```bash
+pterm download https://github.com/AlexNolasco/pixfabrica.git pixfabrica.pinokio.git
+```
+
+Then **Install** and **Start** in the Pinokio UI.
+Opens the editor at http://localhost:5173 (API on http://localhost:8000).
+Details: [pinokio/README.md](pinokio/README.md).
+
 ## Docker (optional)
 
 Docker Compose packages the editor + API without installing uv, pnpm, or FFmpeg on the host.

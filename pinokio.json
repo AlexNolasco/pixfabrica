@@ -1,0 +1,20 @@
+{
+  "title": "Pixfabrica",
+  "description": "Browser-based motion graphics editor for short-form video. Timeline clips, live preview, and MP4 export on the host (OpenGL when available).",
+  "icon": "icon.png",
+  "links": [
+    {
+      "title": "Project",
+      "links": [
+        {
+          "title": "GitHub",
+          "value": "https://github.com/AlexNolasco/pixfabrica"
+        },
+        {
+          "title": "Pinokio launcher docs",
+          "value": "https://github.com/AlexNolasco/pixfabrica/blob/main/pinokio/README.md"
+        }
+      ]
+    }
+  ]
+}
