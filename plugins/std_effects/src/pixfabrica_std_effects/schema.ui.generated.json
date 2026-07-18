@@ -431,5 +431,56 @@
         "step": 0.5
       }
     }
+  },
+  "std-tvbug-gl": {
+    "schema_version": 1,
+    "custom_ui": null,
+    "sections": [
+      {
+        "id": "parameters",
+        "title_key": "ui.effect.std-tvbug-gl.section.parameters",
+        "fields": [
+          "opacity",
+          "frequency"
+        ]
+      },
+      {
+        "id": "timing",
+        "title_key": "ui.section.timing",
+        "fields": [
+          "start",
+          "duration",
+          "enabled"
+        ]
+      }
+    ],
+    "controls": {
+      "id": {
+        "kind": "hidden",
+        "read_only": true
+      },
+      "start": {
+        "kind": "number",
+        "step": 0.1
+      },
+      "duration": {
+        "kind": "number",
+        "step": 0.1
+      },
+      "enabled": {
+        "kind": "toggle"
+      },
+      "opacity": {
+        "kind": "slider",
+        "show_as": "percent",
+        "step": 0.05
+      },
+      "frequency": {
+        "kind": "slider",
+        "minimum": 4.0,
+        "maximum": 24.0,
+        "step": 0.5
+      }
+    }
   }
 }
