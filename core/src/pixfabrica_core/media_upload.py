@@ -18,7 +18,7 @@ MEDIA_UPLOAD_LIMITS: dict[str, int] = {
     "audio_lossless": 60 * 1024 * 1024,
     "image": 10 * 1024 * 1024,
     "lyrics": 5 * 1024 * 1024,
-    "video": 15 * 1024 * 1024,
+    "video": 20 * 1024 * 1024,
     "mesh": 10 * 1024 * 1024,
     "default": 16 * 1024 * 1024,
 }

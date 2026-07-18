@@ -81,7 +81,18 @@ function withTimeout(promise, ms) {
 }
 
 const children = [
-  spawnDev('pnpm', ['exec', 'vite', '--port', webPort, '--strictPort'], webDir),
+  spawnDev(
+    'pnpm',
+    [
+      'exec',
+      'vite',
+      ...(process.env.PIXFABRICA_WEB_HOST ? ['--host', process.env.PIXFABRICA_WEB_HOST] : []),
+      '--port',
+      webPort,
+      '--strictPort',
+    ],
+    webDir,
+  ),
   spawnDev(
     'uv',
     [
