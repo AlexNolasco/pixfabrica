@@ -44,6 +44,10 @@ module.exports = {
     {
       method: "shell.run",
       params: {
+        env: {
+          // Non-interactive install under Pinokio (no TTY prompts).
+          CI: "true",
+        },
         path: "../web",
         message: [
           "pnpm install",

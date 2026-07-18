@@ -55,7 +55,8 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for tests, lint, and PR expectations.
 pterm download https://github.com/AlexNolasco/pixfabrica.git pixfabrica.pinokio.git
 ```
 
-Then **Install** and **Start** in the Pinokio UI.
+Then **Install** and **Start & Open Editor** in the Pinokio UI.
+Click **Open Editor** when it appears.
 Opens the editor at http://localhost:5173 (API on http://localhost:8000).
 Details: [pinokio/README.md](pinokio/README.md).
 

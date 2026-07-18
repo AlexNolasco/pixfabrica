@@ -1,27 +1,30 @@
 module.exports = {
-  // Keep the Vite + API shells alive after URL capture.
+  // Keep the Vite + API process alive after readiness is confirmed.
   daemon: true,
   run: [
     {
+      method: "local.set",
+      params: {
+        // Do not reuse a URL from an earlier run while this launch is starting.
+        url: null,
+      },
+    },
+    {
       method: "shell.run",
       params: {
-        env: {
-          PIXFABRICA_WEB_PORT: "5173",
-          PIXFABRICA_API_PORT: "8000",
-        },
-        path: "../web",
+        path: "..",
         message: [
-          "pnpm dev:all",
+          "node pinokio/start.mjs",
         ],
         on: [{
-          // Match the editor URL specifically so uvicorn :8000 is not captured first.
-          // Vite prints http://localhost:5173/ (or 127.0.0.1).
-          event: "/(http:\\/\\/(?:localhost|127\\.0\\.0\\.1):5173)/",
+          // start.mjs probes Vite before emitting this stable readiness line.
+          event: "/(http:\\/\\/[0-9.:]+)/",
           done: true,
         }],
       },
     },
     {
+      when: "{{input.event && input.event[1]}}",
       method: "local.set",
       params: {
         // Regex capture group is passed as input.event; use index 1.

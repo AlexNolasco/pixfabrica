@@ -8,11 +8,13 @@
 pterm download https://github.com/AlexNolasco/pixfabrica.git pixfabrica.pinokio.git
 ```
 
-Then open the app in Pinokio and run **Install**, then **Start**.
+Then open the app in Pinokio and run **Install**, then **Start & Open Editor**.
+Click **Open Editor** when it appears after both services are ready.
 
 ## What Start does
 
 - Runs `pnpm dev:all` (editor + API), same stack as local `run-all`
+- Waits for the editor to answer before opening it
 - Editor: http://localhost:5173
 - API docs: http://localhost:8000/docs
 - Uses host OpenGL when available (best path for GPU Play on Windows/macOS)

@@ -54,8 +54,8 @@ module.exports = {
           return [
             {
               default: true,
-              icon: "fa-solid fa-terminal",
-              text: "Terminal",
+              icon: "fa-solid fa-spinner",
+              text: "Starting - Open Editor will appear",
               href: "pinokio/start.js",
             },
           ]
@@ -83,7 +83,7 @@ module.exports = {
           {
             default: true,
             icon: "fa-solid fa-power-off",
-            text: "Start",
+            text: "Start & Open Editor",
             href: "pinokio/start.js",
           },
           {

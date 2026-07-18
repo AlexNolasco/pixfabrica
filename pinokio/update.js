@@ -19,6 +19,9 @@ module.exports = {
     {
       method: "shell.run",
       params: {
+        env: {
+          CI: "true",
+        },
         path: "../web",
         message: [
           "pnpm install",
