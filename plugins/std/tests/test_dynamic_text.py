@@ -139,10 +139,12 @@ def test_typewriter_cursor_solid_while_typing() -> None:
     canvas.drawRect.assert_called_once()
 
 
-def test_typewriter_cursor_hides_after_linger() -> None:
-    # done_t = 0.5s, linger = 1.0s; at t=2.0 the cursor must be gone
-    canvas = _draw(t=2.0, text="Hello", effect="typewriter", type_speed=10.0)
-    canvas.drawRect.assert_not_called()
+def test_typewriter_cursor_blinks_after_typing() -> None:
+    # done_t = 0.5s; blink period 0.5s — on for first half, off for second
+    on = _draw(t=2.0, text="Hello", effect="typewriter", type_speed=10.0)
+    on.drawRect.assert_called_once()
+    off = _draw(t=2.3, text="Hello", effect="typewriter", type_speed=10.0)
+    off.drawRect.assert_not_called()
 
 
 def test_typewriter_cursor_disabled() -> None:
