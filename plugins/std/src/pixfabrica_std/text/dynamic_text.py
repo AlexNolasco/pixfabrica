@@ -17,7 +17,6 @@ from pixfabrica_std.tilt import ANGLE_FULL_DESC, ANGLE_FULL_MAX, ANGLE_FULL_MIN
 _SCRAMBLE_CHARSET = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789#$%&@*+=?"
 _SCRAMBLE_REROLL_FRAMES = 3  # unresolved glyphs reroll every N frames
 _CURSOR_BLINK_PERIOD = 0.5  # seconds per blink cycle after typing completes
-_CURSOR_LINGER = 1.0  # seconds the cursor keeps blinking after typing completes
 _CASCADE_RISE_EM = 0.5  # vertical travel of each word during cascade entry
 _SETTLE_FRACTION = 0.3  # fraction of the clip duration spent animating (spread/cascade)
 _SETTLE_CAP = 1.5  # seconds — long clips still get a snappy entry
@@ -89,7 +88,7 @@ class DynamicText(ClipSkia):
     )
     cursor: bool = Field(
         default=True,
-        description="Show a typing cursor that blinks briefly after typing completes (typewriter)",
+        description="Show a typing cursor that blinks after typing completes (typewriter)",
     )
     align: Literal["left", "center", "right"] = Field(
         default="center", description="Text alignment relative to the offset_x anchor"
@@ -245,10 +244,7 @@ class DynamicText(ClipSkia):
                 visible = True
             else:
                 since_done = local_t - done_t
-                visible = (
-                    since_done <= _CURSOR_LINGER
-                    and (since_done % _CURSOR_BLINK_PERIOD) < _CURSOR_BLINK_PERIOD / 2.0
-                )
+                visible = (since_done % _CURSOR_BLINK_PERIOD) < _CURSOR_BLINK_PERIOD / 2.0
             if visible:
                 metrics = font.getMetrics()
                 size = font.getSize()

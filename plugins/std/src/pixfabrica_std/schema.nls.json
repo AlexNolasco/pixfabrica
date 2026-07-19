@@ -341,7 +341,7 @@
     "clip.std-dynamic-text.field.angle.description": "Rotation in degrees, clockwise",
     "clip.std-dynamic-text.field.angle.label": "Angle",
     "clip.std-dynamic-text.field.color.label": "Color",
-    "clip.std-dynamic-text.field.cursor.description": "Show a typing cursor that blinks briefly after typing completes (typewriter)",
+    "clip.std-dynamic-text.field.cursor.description": "Show a typing cursor that blinks after typing completes (typewriter)",
     "clip.std-dynamic-text.field.cursor.label": "Cursor",
     "clip.std-dynamic-text.field.effect.description": "Entry animation effect",
     "clip.std-dynamic-text.field.effect.label": "Effect",
