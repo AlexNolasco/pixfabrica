@@ -30,7 +30,7 @@ from pixfabrica_core.audio.bus import (
 from pixfabrica_core.clips import JobInfo, PrepareContext, RenderJob, TimeState, VisualClip
 from pixfabrica_core.composition.config import ThemeContext
 from pixfabrica_core.composition.track import GLEffectTrack, GLTrack
-from pixfabrica_core.composition.unknown import UnknownClip, UnknownProjectSetting
+from pixfabrica_core.composition.unknown import UnknownClip, UnknownEffect, UnknownProjectSetting
 from pixfabrica_core.errors import RenderError, RenderErrorCode
 from pixfabrica_core.fonts.skia_resolver import warmup_typography_palette
 from pixfabrica_core.job_assets import run_job_asset_contributor_phase
@@ -80,9 +80,11 @@ def _dump_sound(sound: Any) -> dict:
 
 
 def _dump_track(track: Any) -> dict:
-    """Same trick for a TrackClip plus its polymorphic children."""
+    """Same trick for a TrackClip plus its polymorphic children and track effects."""
     payload = _dump_clip_type(track, type_key="clip_type", type_value=type(track).clip_type)
     payload["clips"] = [_dump_visual_clip(el) for el in track.clips]
+    if getattr(track, "effects", None):
+        payload["effects"] = [_dump_effect(fx) for fx in track.effects]
     return payload
 
 
@@ -95,8 +97,8 @@ _MULTI_FALLBACK_FRAME_THRESHOLD = 60
 _RESERVED_CORES = 2
 
 
-def _check_unknown_clips(job: RenderJob) -> None:
-    """Raise RenderError(UNKNOWN_PLUGIN) if any clips or settings are unrecognised."""
+def _check_unknown_plugins(job: RenderJob) -> None:
+    """Raise RenderError(UNKNOWN_PLUGIN) if any clips, effects, or settings are unrecognised."""
     if isinstance(job.theme, UnknownProjectSetting):
         raise RenderError(RenderErrorCode.UNKNOWN_PLUGIN, {"clip_type": job.theme.raw_setting_type})
     if isinstance(job.typography_setting, UnknownProjectSetting):
@@ -104,9 +106,20 @@ def _check_unknown_clips(job: RenderJob) -> None:
             RenderErrorCode.UNKNOWN_PLUGIN, {"clip_type": job.typography_setting.raw_setting_type}
         )
     for track in job.tracks:
+        for fx in track.effects:
+            if isinstance(fx, UnknownEffect):
+                raise RenderError(
+                    RenderErrorCode.UNKNOWN_PLUGIN, {"effect_type": fx.raw_effect_type}
+                )
         for clip in track.clips:
             if isinstance(clip, UnknownClip):
                 raise RenderError(RenderErrorCode.UNKNOWN_PLUGIN, {"clip_type": clip.raw_clip_type})
+            if isinstance(clip, VisualClip):
+                for fx in clip.effects:
+                    if isinstance(fx, UnknownEffect):
+                        raise RenderError(
+                            RenderErrorCode.UNKNOWN_PLUGIN, {"effect_type": fx.raw_effect_type}
+                        )
 
 
 def _resolve_worker_count() -> int:
@@ -150,7 +163,7 @@ async def render_job(
     Raises:
         RenderError: on any known failure (plugin, param, asset, FFmpeg, etc.)
     """
-    _check_unknown_clips(job)
+    _check_unknown_plugins(job)
     if not gl_available() and tracks_need_gl_context(job.tracks):
         raise RenderError(
             RenderErrorCode.GL_UNAVAILABLE,
