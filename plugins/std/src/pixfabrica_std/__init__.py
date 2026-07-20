@@ -66,6 +66,7 @@ from pixfabrica_std.effects.spectrum_glitch import SpectrumGlitch
 from pixfabrica_std.effects.speed_lines import SpeedLines
 from pixfabrica_std.effects.sweep_lines import SweepLines
 from pixfabrica_std.effects.sweep_lines_gl import SweepLinesGL
+from pixfabrica_std.effects.tvbug_post import TvbugPost
 from pixfabrica_std.effects.vhs_grain import VHSGrain
 from pixfabrica_std.effects.vignette import Vignette
 from pixfabrica_std.effects.water_drops_gl import WaterDropsGL
@@ -223,6 +224,7 @@ class Plugin:
         SvgIcon,
         SweepLines,
         SweepLinesGL,
+        TvbugPost,
         VHSGrain,
         Vignette,
         WaterDropsGL,
