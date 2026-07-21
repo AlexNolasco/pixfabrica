@@ -894,6 +894,20 @@ register_icon(
 )
 
 register_icon(
+    "std-turbulent-ring-gl",
+    StaticIconGenerator(
+        '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"'
+        ' fill="none" stroke="currentColor" stroke-width="1.6"'
+        ' stroke-linecap="round" stroke-linejoin="round">'
+        '<ellipse cx="12" cy="12" rx="8" ry="3.5"/>'
+        '<ellipse cx="12" cy="12" rx="5" ry="2" opacity="0.55"/>'
+        '<path d="M4 12c1.5-1 3-1.5 4-1" opacity="0.7"/>'
+        '<path d="M16 13c1 .3 2.5.8 4 1.2" opacity="0.7"/>'
+        "</svg>"
+    ),
+)
+
+register_icon(
     "std-eq-wave-gl",
     StaticIconGenerator(
         '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"'

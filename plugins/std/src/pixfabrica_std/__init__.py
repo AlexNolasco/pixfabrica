@@ -46,6 +46,7 @@ from pixfabrica_std.background.solid_background import SolidBackground
 from pixfabrica_std.background.star_dust_gl import StarDustGL
 from pixfabrica_std.background.star_nest_gl import StarNestGL
 from pixfabrica_std.background.sun_gl import SunGL
+from pixfabrica_std.background.turbulent_ring_gl import TurbulentRingGL
 from pixfabrica_std.background.warped_grid_gl import WarpedGridGL
 
 # config
@@ -217,6 +218,7 @@ class Plugin:
         StarDustGL,
         StarNestGL,
         SunGL,
+        TurbulentRingGL,
         WarpedGridGL,
         StaticText,
         TeleprompterCaption,
