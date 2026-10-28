@@ -1,0 +1,40 @@
+{
+  "repository": "https://github.com/mattpocock/skills",
+  "commit": "59db609eb1e18aaf59b63284d0e52255aff0c63c",
+  "imported_on": "2026-10-28",
+  "license": "MIT",
+  "mode": "locally adapted copies; reviewed manual updates",
+  "skills": [
+    {
+      "name": "diagnosing-bugs",
+      "source": "skills/engineering/diagnosing-bugs",
+      "destination": ".agents/skills/diagnosing-bugs"
+    },
+    {
+      "name": "tdd",
+      "source": "skills/engineering/tdd",
+      "destination": ".agents/skills/tdd"
+    },
+    {
+      "name": "codebase-design",
+      "source": "skills/engineering/codebase-design",
+      "destination": ".agents/skills/codebase-design"
+    },
+    {
+      "name": "improve-codebase-architecture",
+      "source": "skills/engineering/improve-codebase-architecture",
+      "destination": ".agents/skills/improve-codebase-architecture"
+    }
+  ],
+  "adaptations": [
+    "Repository instructions and docs/agents/skills.md are shared context; no global installation or application dependencies.",
+    "Debugging starts with user-facing E2E reproduction; removes bash helper and active-checkout bisection requirements.",
+    "TDD uses established test interfaces without repeated confirmation and reviews refactoring locally without a code-review skill dependency.",
+    "Design vocabulary preserves project terminology; test replacement retains meaningful coverage.",
+    "Architecture interview and domain discussion are self-contained; grilling and domain-modeling are not required.",
+    "Architecture report is offline HTML/CSS/SVG instead of CDN Tailwind/Mermaid.",
+    "Architecture upstream explicit-only behavior is represented by agents/openai.yaml.",
+    "Delegation requires a user request and remains in the existing checkout; alternative designs can be explored sequentially.",
+    "Markdown uses plain dashes and one sentence per line."
+  ]
+}
