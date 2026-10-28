@@ -39,12 +39,7 @@ class ProcessWorkerPool:
         self,
         *,
         size: int,
-        job_payload: dict[str, Any],
-        width: int,
-        height: int,
-        fps: float,
-        locale: str,
-        audio_timeline_payload: dict[str, list[dict[str, Any]]],
+        snapshot: str,
         plugins_dir: str | None = None,
     ) -> None:
         if size < 1:
@@ -56,12 +51,7 @@ class ProcessWorkerPool:
         self._processes: list[Any] = []
         self._executor = ThreadPoolExecutor(max_workers=_QUEUE_DRAIN_THREADS)
         self._init_args = dict(
-            job_payload=job_payload,
-            width=width,
-            height=height,
-            fps=fps,
-            locale=locale,
-            audio_timeline_payload=audio_timeline_payload,
+            snapshot=snapshot,
             plugins_dir=plugins_dir,
         )
         self._shutdown_complete = False
