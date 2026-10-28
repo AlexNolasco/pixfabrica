@@ -106,6 +106,20 @@ Workspace members (root [pyproject.toml](pyproject.toml)): `core`, `api`, `rende
 
 - **Full authoring contract:** [plugins/README.md](plugins/README.md).
 
+## Agent skills
+
+Project skills live in `.agents/skills/` and follow this file's rules.
+Work in the existing checkout and selected branch; create or switch worktrees only when the user explicitly requests it.
+
+| Task | Skill |
+|------|-------|
+| Reproduce and diagnose a bug | [diagnosing-bugs](.agents/skills/diagnosing-bugs/SKILL.md) |
+| Implement behavior with a test-first loop | [tdd](.agents/skills/tdd/SKILL.md) |
+| Design or simplify an interface | [codebase-design](.agents/skills/codebase-design/SKILL.md) |
+| Explicitly requested architecture survey | [improve-codebase-architecture](.agents/skills/improve-codebase-architecture/SKILL.md) |
+
+See [skill integration guidance](docs/agents/skills.md) for shared context, invocation examples, provenance, and updates.
+
 ## Further reading
 
 - [README.md](README.md) — quick start, repo map, ports
