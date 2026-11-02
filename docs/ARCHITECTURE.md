@@ -233,6 +233,28 @@ for frame in total_frames:
 
 ---
 
+## Resolved render snapshots
+
+Composition JSON remains the authored project format shared by the editor, API, and CLI.
+The renderer's internal worker handoff uses a separate, versioned resolved render snapshot from `renderer/src/pixfabrica_renderer/parallel/snapshot.py`.
+It is not a project export format.
+
+The parent calls `encode_render_snapshot(job, info, audio)` after resolving project settings, audio, and parent-only job assets.
+The snapshot carries concrete plugin fields and stable type IDs, the effective `JobInfo` including resolved colors and typography, audio buses, and project-variable warnings.
+The composition retains its design dimensions and original settings; workers use the effective `JobInfo` for preparation and drawing.
+Encoding detaches the snapshot from later parent mutations and excludes private plugin caches.
+
+Workers call `restore_render_snapshot` to register available plugins, validate the snapshot, and reconstruct the resolved inputs.
+Core's `RenderJob.restore_resolved` validates composition fields without repeating timeline offsets, typography scaling, or project-variable substitution.
+Unknown plugins fail validation instead of silently disappearing in a worker.
+Ordinary project loading continues to apply those transformations normally.
+
+Visual preparation, GL contexts, textures, Skia resources, and their cleanup stay local to each worker process.
+Singleton-effect serial enforcement, short-job fallback, worker-startup fallback, and compositor order remain unchanged.
+Behavior tests cover snapshot round trips and real serial versus spawned-worker video output for resolved themes and output typography scaling.
+
+---
+
 ## Audio Bus System
 
 - Audio analyzer clips publish to **named buses** (not wired directly to consumers)

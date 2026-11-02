@@ -21,16 +21,15 @@ import os
 import threading
 from collections.abc import AsyncIterator
 from pathlib import Path
-from typing import TYPE_CHECKING, Any, Literal
+from typing import TYPE_CHECKING, Literal
 
 from pixfabrica_core.audio.bus import (
     AudioTimeline,
     align_bus_timeline_to_job,
 )
-from pixfabrica_core.clips import JobInfo, PrepareContext, RenderJob, TimeState, VisualClip
+from pixfabrica_core.clips import JobInfo, PrepareContext, RenderJob, TimeState
 from pixfabrica_core.composition.config import ThemeContext
 from pixfabrica_core.composition.track import GLEffectTrack, GLTrack
-from pixfabrica_core.composition.unknown import UnknownClip, UnknownEffect, UnknownProjectSetting
 from pixfabrica_core.errors import RenderError, RenderErrorCode
 from pixfabrica_core.fonts.skia_resolver import warmup_typography_palette
 from pixfabrica_core.job_assets import run_job_asset_contributor_phase
@@ -45,47 +44,13 @@ from pixfabrica_renderer.audio_mix import mix_sounds
 from pixfabrica_renderer.compositor import Compositor
 from pixfabrica_renderer.gl_probe import gl_available
 from pixfabrica_renderer.parallel import ParallelFrameRunner, ProcessWorkerPool
+from pixfabrica_renderer.parallel.snapshot import encode_render_snapshot, validate_render_plugins
 from pixfabrica_renderer.video import VideoWriter
 
 if TYPE_CHECKING:
     pass
 
 log = logging.getLogger("pixfabrica.renderer.render")
-
-
-def _dump_clip_type(clip: Any, *, type_key: str, type_value: str) -> dict:
-    """Dump a model using its concrete class, re-attaching the ClassVar type id."""
-    payload = clip.model_dump(mode="json")
-    payload[type_key] = type_value
-    return payload
-
-
-def _dump_visual_clip(el: Any) -> dict:
-    payload = _dump_clip_type(el, type_key="clip_type", type_value=type(el).clip_type)
-    if isinstance(el, VisualClip) and el.effects:
-        payload["effects"] = [_dump_effect(fx) for fx in el.effects]
-    return payload
-
-
-def _dump_effect(fx: Any) -> dict:
-    return _dump_clip_type(fx, type_key="effect_type", type_value=type(fx).effect_type)
-
-
-def _dump_project_setting(setting: Any) -> dict:
-    return _dump_clip_type(setting, type_key="setting_type", type_value=type(setting).setting_type)
-
-
-def _dump_sound(sound: Any) -> dict:
-    return _dump_clip_type(sound, type_key="sound_type", type_value=type(sound).sound_type)
-
-
-def _dump_track(track: Any) -> dict:
-    """Same trick for a TrackClip plus its polymorphic children and track effects."""
-    payload = _dump_clip_type(track, type_key="clip_type", type_value=type(track).clip_type)
-    payload["clips"] = [_dump_visual_clip(el) for el in track.clips]
-    if getattr(track, "effects", None):
-        payload["effects"] = [_dump_effect(fx) for fx in track.effects]
-    return payload
 
 
 # Below this many frames, multi-worker spawn + per-worker prepare cost
@@ -95,31 +60,6 @@ _MULTI_FALLBACK_FRAME_THRESHOLD = 60
 
 # Leave 2 cores for the OS, ffmpeg encoder, and the parent's drain thread.
 _RESERVED_CORES = 2
-
-
-def _check_unknown_plugins(job: RenderJob) -> None:
-    """Raise RenderError(UNKNOWN_PLUGIN) if any clips, effects, or settings are unrecognised."""
-    if isinstance(job.theme, UnknownProjectSetting):
-        raise RenderError(RenderErrorCode.UNKNOWN_PLUGIN, {"clip_type": job.theme.raw_setting_type})
-    if isinstance(job.typography_setting, UnknownProjectSetting):
-        raise RenderError(
-            RenderErrorCode.UNKNOWN_PLUGIN, {"clip_type": job.typography_setting.raw_setting_type}
-        )
-    for track in job.tracks:
-        for fx in track.effects:
-            if isinstance(fx, UnknownEffect):
-                raise RenderError(
-                    RenderErrorCode.UNKNOWN_PLUGIN, {"effect_type": fx.raw_effect_type}
-                )
-        for clip in track.clips:
-            if isinstance(clip, UnknownClip):
-                raise RenderError(RenderErrorCode.UNKNOWN_PLUGIN, {"clip_type": clip.raw_clip_type})
-            if isinstance(clip, VisualClip):
-                for fx in clip.effects:
-                    if isinstance(fx, UnknownEffect):
-                        raise RenderError(
-                            RenderErrorCode.UNKNOWN_PLUGIN, {"effect_type": fx.raw_effect_type}
-                        )
 
 
 def _resolve_worker_count() -> int:
@@ -163,7 +103,7 @@ async def render_job(
     Raises:
         RenderError: on any known failure (plugin, param, asset, FFmpeg, etc.)
     """
-    _check_unknown_plugins(job)
+    validate_render_plugins(job)
     if not gl_available() and tracks_need_gl_context(job.tracks):
         raise RenderError(
             RenderErrorCode.GL_UNAVAILABLE,
@@ -411,35 +351,13 @@ async def _render_loop_parallel(
             "If you see worse-than-single performance, set parallelism='single'."
         )
 
-    # Two Pydantic gotchas force a hand-rolled payload here:
-    #   1. ClassVar type ids (clip_type, effect_type, setting_type, sound_type) aren't in model_dump.
-    #   2. Tracks declare clips: list[Clip], so Pydantic dumps each
-    #      clip using the BASE class fields only (subclass-specific fields
-    #      like `text` get silently dropped). Same story for the theme /
-    #      typography_setting fields typed as ThemeSetting | None.
-    # Walk the live job and dump each polymorphic clip with its concrete class.
-    job_payload = job.model_dump(mode="json")
-    job_payload["tracks"] = [_dump_track(t) for t in job.tracks]
-    job_payload["sounds"] = [_dump_sound(s) for s in job.sounds]
-    if job.theme is not None:
-        job_payload["theme"] = _dump_project_setting(job.theme)
-    if job.typography_setting is not None:
-        job_payload["typography_setting"] = _dump_project_setting(job.typography_setting)
-
-    audio_payload = {
-        bus: [f.model_dump(mode="json") for f in frames] for bus, frames in audio_timeline.items()
-    }
+    snapshot = encode_render_snapshot(job, ji, audio_timeline)
 
     pool: ProcessWorkerPool | None = None
     try:
         pool = ProcessWorkerPool(
             size=workers,
-            job_payload=job_payload,
-            width=ji.width,
-            height=ji.height,
-            fps=ji.fps,
-            locale=ji.locale,
-            audio_timeline_payload=audio_payload,
+            snapshot=snapshot,
             plugins_dir=plugins_dir,
         )
         try:

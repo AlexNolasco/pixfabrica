@@ -62,6 +62,17 @@ class RenderJob(BaseModel):
     def project_variable_warnings(self) -> list[PrepareWarning]:
         return list(self._variable_warnings)
 
+    @classmethod
+    def restore_resolved(cls, data: dict[str, Any], *, warnings: list[PrepareWarning]) -> RenderJob:
+        """Validate an internal resolved snapshot without repeating load-time transforms.
+
+        This is not a project-file loader: starts, typography, and project variables
+        must already be resolved. Plugin registration must precede restoration.
+        """
+        job = cls.model_validate(data, context={"resolved_render_snapshot": True})
+        job._variable_warnings = list(warnings)
+        return job
+
     @model_validator(mode="before")
     @classmethod
     def _deserialize_clips(cls, data: Any) -> Any:
@@ -111,9 +122,9 @@ class RenderJob(BaseModel):
         # _resolve_timeline is destructive (it mutates clip.start in place
         # and re-scales typography). Re-running it on an already-resolved
         # payload would shift clip.start by an extra track.start and scale
-        # typography twice. Workers ship the post-resolution model_dump and
-        # set this context flag so re-validation is a no-op.
-        if info.context and info.context.get("skip_resolve_timeline"):
+        # typography twice. restore_resolved validates snapshots without
+        # repeating these load-time transforms.
+        if info.context and info.context.get("resolved_render_snapshot"):
             return self
         for track in self.tracks:
             if track.duration is None:
@@ -131,6 +142,8 @@ class RenderJob(BaseModel):
 
     @model_validator(mode="after")
     def _apply_project_variables(self, info: ValidationInfo) -> RenderJob:
+        if info.context and info.context.get("resolved_render_snapshot"):
+            return self
         from pixfabrica_core.project_variables import apply_project_variables
 
         self._variable_warnings = apply_project_variables(self)
